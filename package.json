@@ -1,9 +1,12 @@
 {
+  "name": "syncano-socket-user-auth",
+  "description": "Syncano Socket for basic user authentication and registration",
+  "author": "Syncano Inc.",
+  "repository": "https://github.com/Syncano/syncano-socket-user-auth.git",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.16.2",
     "fb": "^2.0.0",
-    "@syncano/core": "^0.7.1"
+    "@syncano/core": "canary"
   },
   "scripts": {
     "build": "npm && npm run build:src && npm run build:env",
@@ -17,8 +20,8 @@
     "test:lint": "standard --fix"
   },
   "devDependencies": {
-    "@syncano/test": "^0.7.1",
-    "@syncano/test-tools": "^0.7.1",
+    "@syncano/test": "canary",
+    "@syncano/test-tools": "canary",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
