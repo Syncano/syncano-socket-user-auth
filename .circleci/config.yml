@@ -20,9 +20,9 @@ jobs:
       - run: npm install
 
       - save_cache:
-        paths:
-          - node_modules
-        key: v5-dependencies-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+          key: v5-dependencies-{{ checksum "package.json" }}
 
       - save_cache:
           key: v5-repo-{{ .Environment.CIRCLE_SHA1 }}
