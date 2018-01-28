@@ -1,0 +1,90 @@
+name: user-auth
+description: Basic user auth/register Socket
+version: 0.0.12
+keywords:
+  - user
+  - register
+  - auth
+  - authentication
+
+classes:
+  user:
+    - name: full_name
+      type: string
+    - name: type
+      type: string
+      filter_index: true
+
+endpoints:
+  login:
+    parameters:
+      username:
+        type: string
+        description: Username
+        example: joe
+      password:
+        type: string
+        description: User password
+        example: super-sercret-password
+    response:
+      mimetype: application/json
+      examples:
+        - exit_code: 200
+          description: Success
+          example: |
+            {
+              token: "cb21ff98ac8c7dda8fcd0129b0adb0254dea5c8e",
+              username: "u"
+            }
+        - exit_code: 400
+          description: Failed
+          example: |
+            {}
+  register:
+    parameters:
+      username:
+        type: string
+        description: User name
+        example: joe
+      password:
+        type: string
+        description: User password
+        example: super-sercret-password
+    response:
+      mimetype: application/json
+      examples:
+        - exit_code: 200
+          description: Success
+          example: |
+            {
+              token: "cb21ff98ac8c7dda8fcd0129b0adb0254dea5c8e",
+              username: "u"
+            }
+        - exit_code: 400
+          description: Failed
+          example: |
+            {}
+  social-login:
+    parameters:
+      network:
+        type: string
+        description: Network name
+        example: facebook
+      access_token:
+        type: string
+        description: Access token
+        example: 3254uy23b4k32
+    response:
+      mimetype: application/json
+      examples:
+        - exit_code: 200
+          description: Success
+          example: |
+            {
+              token: "cb21ff98ac8c7dda8fcd0129b0adb0254dea5c8e",
+              username: "u"
+            }
+        - exit_code: 400
+          description: Failed
+          example: |
+            {}
