@@ -1,6 +1,6 @@
 name: user-auth
 description: Basic user auth/register Socket
-version: 0.0.12
+version: 0.0.1
 keywords:
   - user
   - register
@@ -17,6 +17,7 @@ classes:
 
 endpoints:
   login:
+    description: Log in user by checking username and password
     parameters:
       username:
         type: string
@@ -27,20 +28,23 @@ endpoints:
         description: User password
         example: super-sercret-password
     response:
-      mimetype: application/json
-      examples:
-        - exit_code: 200
-          description: Success
-          example: |
-            {
-              token: "cb21ff98ac8c7dda8fcd0129b0adb0254dea5c8e",
-              username: "u"
-            }
-        - exit_code: 400
-          description: Failed
-          example: |
-            {}
+      success:
+        exit_code: 200
+        description: Success
+        example: |
+          {
+            "token": "cb21ff98ac8c7dda8fcd0129b0adb0254dea5c8e",
+            "username": "username"
+          }
+      fail:
+        exit_code: 400
+        description: Authentication failed
+        example: |
+          {
+             "message": "Given credentials are invalid."
+          }
   register:
+    description: Register user
     parameters:
       username:
         type: string
@@ -51,19 +55,27 @@ endpoints:
         description: User password
         example: super-sercret-password
     response:
-      mimetype: application/json
-      examples:
-        - exit_code: 200
-          description: Success
-          example: |
-            {
-              token: "cb21ff98ac8c7dda8fcd0129b0adb0254dea5c8e",
-              username: "u"
-            }
-        - exit_code: 400
-          description: Failed
-          example: |
-            {}
+      success:
+        description: Success
+        example: |
+          {
+            "token": "cb21ff98ac8c7dda8fcd0129b0adb0254dea5c8e",
+            "username": "username"
+          }
+      wrongEmail:
+        exit_code: 400
+        description: Username is not a valid email
+        example: |
+          {
+             "username": "Given email is invalid." }
+          }
+      userAlreadyExist:
+        exit_code: 400
+        description: Failed
+        example: |
+          {
+             "username": "User already exists." }
+          }
   social-login:
     parameters:
       network:
@@ -75,16 +87,17 @@ endpoints:
         description: Access token
         example: 3254uy23b4k32
     response:
-      mimetype: application/json
-      examples:
-        - exit_code: 200
-          description: Success
-          example: |
-            {
-              token: "cb21ff98ac8c7dda8fcd0129b0adb0254dea5c8e",
-              username: "u"
-            }
-        - exit_code: 400
-          description: Failed
-          example: |
-            {}
+      success:
+        description: Success
+        example: |
+          {
+            "token": "cb21ff98ac8c7dda8fcd0129b0adb0254dea5c8e",
+            "username": "username"
+          }
+      fail:
+        exit_code: 400
+        description: Authentication failed
+        example: |
+          {
+             "message": "Error!" }
+          }

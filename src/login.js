@@ -1,36 +1,20 @@
-/* global META, ARGS */
-import fetch from 'axios'
-import {users, response} from 'syncano-server'
+import Server from '@syncano/core'
 
-const {username, password} = ARGS
-const AUTH_URL = `https://api.syncano.io/v2/instances/${
-  META.instance
-}/users/auth/`
+export default async (ctx) => {
+  const {users, response, logger} = new Server(ctx)
+  const {username, password} = ctx.args
 
-users
-  .where('username', 'eq', username)
-  .firstOrFail()
-  .then(authorizeUser)
-  .catch(respondWithInvalidCredentials)
+  const {debug} = logger('user:auth:login')
 
-function authorizeUser() {
-  fetch({
-    url: AUTH_URL,
-    method: 'POST',
-    data: JSON.stringify({username, password}),
-    headers: {
-      'Content-Type': 'application/json',
-      'X-API-KEY': META.token
-    }
-  })
-    .then(respondWithValidCredentials)
-    .catch(respondWithInvalidCredentials)
-}
+  try {
+    const authorizedUser = await users.login({username, password})
 
-function respondWithValidCredentials({data}) {
-  response.json({token: data.user_key, username: data.username})
-}
-
-function respondWithInvalidCredentials() {
-  response.json({message: 'Given credentials are invalid.'}, 400)
+    response.json({
+      token: authorizedUser.user_key,
+      username: authorizedUser.username
+    })
+  } catch (err) {
+    debug(err)
+    response.json({message: 'Given credentials are invalid.'}, 400)
+  }
 }

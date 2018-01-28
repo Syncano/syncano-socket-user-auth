@@ -1,48 +1,35 @@
-/* global ARGS */
-import {users, response} from 'syncano-server'
+import Server from '@syncano/core'
 import {isEmail} from './helpers'
 
-const {username, password} = ARGS
+export default async (ctx) => {
+  const {users, response, logger} = new Server(ctx)
+  const {username, password} = ctx.args
 
-if (isEmail(username)) {
-  users
-    .where('username', 'eq', username)
-    .firstOrFail()
-    .then(respondWithUserAlreadyExists)
-    .catch(createUser)
-} else {
-  respondWithInvalidEmail()
-}
+  const {debug} = logger('user:auth:register')
 
-function createUser() {
-  const user = {
-    username,
-    password,
-    national_id: ARGS.national_id
+  if (isEmail(username)) {
+    let user
+    try {
+      // Try to find user with this username
+      user = await users.where('username', 'eq', username).first()
+      if (user) {
+        // If there is a user, we can't register him
+        return response.json({username: 'User already exists.'}, 400)
+      } else {
+        // Let's try to create user account
+        user = await users.create({username, password})
+        return response.json({
+          id: user.id,
+          token: user.user_key,
+          username: user.username
+        })
+      }
+    } catch (err) {
+      // When something went wrong
+      debug(err)
+      return response.json({message: err.message}, 400)
+    }
+  } else {
+    return response.json({username: 'Given email is invalid.'}, 400)
   }
-
-  users
-    .create(user)
-    .then(respondWithUser)
-    .catch(respondWithError)
-}
-
-function respondWithUser(res) {
-  response.json({
-    id: res.id,
-    token: res.user_key,
-    email: res.email
-  })
-}
-
-function respondWithError({response: err}) {
-  err.json().then(data => response.json(data, 400))
-}
-
-function respondWithUserAlreadyExists() {
-  response.json({username: 'User already exists.'}, 400)
-}
-
-function respondWithInvalidEmail() {
-  response.json({username: 'Given email is invalid.'}, 400)
 }

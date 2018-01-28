@@ -15,16 +15,16 @@ export default ctx => {
       const user = await users
         .fields('id', 'user_key', 'full_name', 'groups', 'created_at')
         .firstOrCreate(
-          {
-            username: res.id
-          },
-          {
-            username: res.id,
-            password: Math.random()
+        {
+          username: res.id
+        },
+        {
+          username: res.id,
+          password: Math.random()
               .toString(36)
               .slice(-8),
-            full_name: res.name
-          }
+          full_name: res.name
+        }
         )
       debug('user', user)
       return response.json(user)
