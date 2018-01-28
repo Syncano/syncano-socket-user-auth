@@ -5,6 +5,9 @@ import {createInstance, deleteInstance, uniqueInstance} from '@syncano/test-tool
 
 describe('register', () => {
   const instanceName = uniqueInstance()
+  const meta = {
+    token: process.env.E2E_CLI_ACCOUNT_KEY
+  }
 
   before(async () => {
     await createInstance(instanceName)
@@ -18,7 +21,7 @@ describe('register', () => {
       password: 'somepassword'
     }
 
-    const result = await run('register', { args })
+    const result = await run('register', { args, meta })
     assert.propertyVal(result, 'code', 200)
   })
 
@@ -28,7 +31,7 @@ describe('register', () => {
       password: 'somepassword'
     }
 
-    const result = await run('register', { args })
+    const result = await run('register', { args, meta })
     assert.propertyVal(result, 'code', 400)
     assert.propertyVal(result.data, 'username', 'User already exists.')
   })
@@ -39,7 +42,7 @@ describe('register', () => {
       password: 'somepassword'
     }
 
-    const result = await run('register', { args })
+    const result = await run('register', { args, meta })
     assert.propertyVal(result, 'code', 400)
     assert.propertyVal(result.data, 'username', 'Given email is invalid.')
   })

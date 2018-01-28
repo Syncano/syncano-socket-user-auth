@@ -6,6 +6,9 @@ import {createInstance, deleteInstance, uniqueInstance} from '@syncano/test-tool
 
 describe('login', () => {
   let users
+  const meta = {
+    token: process.env.E2E_CLI_ACCOUNT_KEY
+  }
   const instanceName = uniqueInstance()
   before(async () => {
     await createInstance(instanceName)
@@ -16,7 +19,7 @@ describe('login', () => {
       meta: {
         api_host: process.env.SYNCANO_HOST,
         socket: 'test-socket',
-        token: process.env.E2E_ACCOUNT_KEY
+        token: process.env.E2E_CLI_ACCOUNT_KEY
       }
     })
 
@@ -25,7 +28,7 @@ describe('login', () => {
   after(() => deleteInstance(instanceName))
 
   it('can\'t login without credentials', async () => {
-    const result = await run('login')
+    const result = await run('login', {meta})
     assert.propertyVal(result, 'code', 400)
     assert.propertyVal(result.data, 'message', 'Given credentials are invalid.')
   })
@@ -43,7 +46,8 @@ describe('login', () => {
       args: {
         username: credentials.username,
         password: credentials.password
-      }
+      },
+      meta
     })
 
     assert.propertyVal(result, 'code', 200)
