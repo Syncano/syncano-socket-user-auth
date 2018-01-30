@@ -10,7 +10,7 @@
     "fb": "^2.0.0"
   },
   "scripts": {
-    "build": "npm && npm run build:src && npm run build:env",
+    "build": "npm install && npm run build:src && npm run build:env",
     "build:src": "sh ./bin/compile",
     "build:env": "sh ./bin/compile-env",
     "test": "npm-run-all --parallel test:lint test:e2e:coverage",
