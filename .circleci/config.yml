@@ -13,19 +13,18 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v5-dependencies-{{ checksum "package.json" }}
-          - v5-dependencies
+          - v6-dependencies-{{ checksum "package.json" }}
 
-      - run: sudo npm install -g @syncano/cli
       - run: npm install
+      - run: npm install @syncano/cli@canary --no-save
 
       - save_cache:
           paths:
             - node_modules
-          key: v5-dependencies-{{ checksum "package.json" }}
+          key: v6-dependencies-{{ checksum "package.json" }}
 
       - save_cache:
-          key: v5-repo-{{ .Environment.CIRCLE_SHA1 }}
+          key: v6-repo-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ~/repo
 
@@ -38,8 +37,42 @@ jobs:
 
     steps:
       - restore_cache:
-          key: v5-repo-{{ .Environment.CIRCLE_SHA1 }}
+          key: v6-repo-{{ .Environment.CIRCLE_SHA1 }}
       - run: npm run test
+
+      - store_artifacts:
+          path: ~/repo/test/.results
+          destination: results
+
+  deploy_staging:
+    name: Deploy
+    docker:
+      - image: circleci/node:latest
+
+    working_directory: ~/repo
+
+    steps:
+      - restore_cache:
+          key: v6-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - add_ssh_keys
+      - run: echo '|1|BS8rJGfFqV2SXnU8vClimfxwDuc=|1QpVgk+tuVIRyREOvpIm4PQY9H4= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==' > ~/.ssh/known_hosts
+      - run: SYNCANO_AUTH_KEY=$STAGING_SYNCANO_AUTH_KEY SYNCANO_HOST=api.syncano.rocks npx s submit ${SOCKET_NAME} -b patch
+      - run: SYNCANO_AUTH_KEY=$STAGING_SYNCANO_AUTH_KEY SYNCANO_HOST=api.syncano.rocks npx s publish ${SOCKET_NAME}
+      - run: git config --global user.email $GITHUB_EMAIL && git config --global user.name $GITHUB_NAME
+      - run: git commit -a -m "Bumping version [ci skip]" && git push origin $CIRCLE_BRANCH
+
+  deploy:
+    name: Deploy
+    docker:
+      - image: circleci/node:latest
+
+    working_directory: ~/repo
+
+    steps:
+      - restore_cache:
+          key: v6-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - run: npx s submit ${SOCKET_NAME}
+      - run: npx s publish ${SOCKET_NAME}
 
 workflows:
   version: 2
@@ -49,3 +82,15 @@ workflows:
       - test:
           requires:
             - build
+      - deploy_staging:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
+      - deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only: /\d/
