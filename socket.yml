@@ -1,14 +1,12 @@
 name: user-auth
 description: Basic user auth/register Socket
-version: 0.0.2
+version: 0.0.3
 runtime: nodejs_v8
-
 keywords:
   - user
   - register
   - auth
   - authentication
-
 classes:
   user:
     - name: full_name
@@ -16,7 +14,6 @@ classes:
     - name: type
       type: string
       filter_index: true
-
 endpoints:
   login:
     description: Log in user by checking username and password
