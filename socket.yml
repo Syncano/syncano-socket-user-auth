@@ -1,6 +1,6 @@
 name: user-auth
 description: Basic user auth/register Socket
-version: 0.0.1
+version: 0.0.2
 runtime: nodejs_v8
 
 keywords:
