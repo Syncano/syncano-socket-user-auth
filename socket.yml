@@ -48,7 +48,7 @@ endpoints:
       username:
         type: string
         description: User name
-        example: joe
+        example: joe@email.com
       password:
         type: string
         description: User password
