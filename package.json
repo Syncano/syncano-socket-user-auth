@@ -1,5 +1,5 @@
 {
-  "name": "@eyedea/socket-user-auth",
+  "name": "@syncano/socket-user-auth",
   "version": "0.1.4",
   "public": true,
   "description": "Syncano Socket for basic user authentication and registration",
