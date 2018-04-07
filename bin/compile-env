@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
 mkdir -p .dist
-cp package.json .dist
 cd .dist
-npm install --production
+ln -s ../package.json package.json
+npm install --production --ignore-scripts

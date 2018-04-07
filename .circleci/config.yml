@@ -56,8 +56,7 @@ jobs:
           key: v6-repo-{{ .Environment.CIRCLE_SHA1 }}
       - add_ssh_keys
       - run: echo '|1|BS8rJGfFqV2SXnU8vClimfxwDuc=|1QpVgk+tuVIRyREOvpIm4PQY9H4= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==' > ~/.ssh/known_hosts
-      - run: SYNCANO_AUTH_KEY=$STAGING_SYNCANO_AUTH_KEY SYNCANO_HOST=api.syncano.rocks npx s submit ${SOCKET_NAME} -b patch
-      - run: SYNCANO_AUTH_KEY=$STAGING_SYNCANO_AUTH_KEY SYNCANO_HOST=api.syncano.rocks npx s publish ${SOCKET_NAME}
+      - run: npm publish
       - run: git config --global user.email $GITHUB_EMAIL && git config --global user.name $GITHUB_NAME
       - run: git commit -a -m "Bumping version [ci skip]" && git push origin $CIRCLE_BRANCH
 
@@ -71,8 +70,7 @@ jobs:
     steps:
       - restore_cache:
           key: v6-repo-{{ .Environment.CIRCLE_SHA1 }}
-      - run: npx s submit ${SOCKET_NAME}
-      - run: npx s publish ${SOCKET_NAME}
+      - run: npm publish
 
 workflows:
   version: 2
