@@ -3,7 +3,7 @@
   "version": "0.1.4",
   "public": true,
   "description": "Syncano Socket for basic user authentication and registration",
-  "author": "EYEDEA",
+  "author": "Syncano",
   "repository": "https://github.com/Syncano/syncano-socket-user-auth.git",
   "license": "MIT",
   "dependencies": {
