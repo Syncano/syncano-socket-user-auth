@@ -1,6 +1,4 @@
 #!/usr/bin/env sh
 
 mkdir -p .dist
-cd .dist
-ln -s ../package.json package.json
-npm install --production --ignore-scripts
+yarn install --production --modules-folder .dist/node_modules --ignore-scripts
