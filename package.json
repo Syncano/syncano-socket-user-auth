@@ -1,6 +1,6 @@
 {
   "name": "@syncano/socket-user-auth",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "public": true,
   "description": "Syncano Socket for basic user authentication and registration",
   "author": "Syncano",
@@ -14,7 +14,7 @@
     "fb": "^2.0.0"
   },
   "scripts": {
-    "postinstall": "yarn install --ignore-scripts && yarn run build",
+    "postinstall": "yarn install --production=false --ignore-scripts",
     "build": "yarn run build:src && yarn run build:env",
     "build:src": "sh ./bin/compile",
     "build:env": "sh ./bin/compile-env",
