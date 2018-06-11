@@ -46,7 +46,6 @@ jobs:
           destination: results
 
       - run: npm run test
-      - run: npm run audit
 
   deploy_staging:
     name: Deploy
