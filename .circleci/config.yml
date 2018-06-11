@@ -17,6 +17,7 @@ jobs:
 
       - run: npm install
       - run: npm install @syncano/cli@canary --no-save
+      - run: npm run build
 
       - save_cache:
           paths:
