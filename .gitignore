@@ -1,0 +1,5 @@
+.zip
+.envrc
+.dist
+node_modules
+coverage
