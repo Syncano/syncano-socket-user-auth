@@ -19,7 +19,6 @@
     "build:env": "sh ./bin/compile-env",
     "test": "npm-run-all --parallel test:lint test:e2e",
     "test:e2e-single": "NODE_ENV=test jest",
-    "test:e2e-single:coverage": "nyc --produce-source-map=true NODE_ENV=test npm run test:e2e-single",
     "test:e2e": "npm run test:e2e-single -- test",
     "test:e2e:debug": "npm run test:e2e-single -- 'test' --inspect-brk",
     "test:audit": "npm audit",
