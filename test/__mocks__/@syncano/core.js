@@ -26,4 +26,4 @@ syncanoStubbed.__setMocks = (mocks) => {
   customMock = mocks
 }
 
-module.exports = syncanoStubbed;
+module.exports = syncanoStubbed

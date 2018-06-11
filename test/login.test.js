@@ -1,10 +1,6 @@
-/* global describe it beforeAll afterAll */
-import path from 'path'
-import proxyquire from 'proxyquire'
+/* global describe it expect */
 import sinon from 'sinon'
-import {assert} from 'chai'
 import {run} from '@syncano/test'
-import {createInstance, deleteInstance, uniqueInstance} from '@syncano/test-tools'
 
 describe('login', () => {
   it('can\'t login without credentials', async () => {
@@ -15,8 +11,8 @@ describe('login', () => {
     })
 
     const result = await run('login')
-    assert.propertyVal(result, 'code', 400)
-    assert.propertyVal(result.data, 'message', 'Given credentials are invalid.')
+    expect(result).toHaveProperty('code', 400)
+    expect(result.data).toHaveProperty('message', 'Given credentials are invalid.')
   })
 
   it('can login existing user', async () => {
@@ -41,8 +37,8 @@ describe('login', () => {
       }
     })
 
-    assert.propertyVal(result, 'code', 200)
-    assert.property(result.data, 'token')
-    assert.property(result.data, 'username')
+    expect(result).toHaveProperty('code', 200)
+    expect(result.data).toHaveProperty('token')
+    expect(result.data).toHaveProperty('username')
   })
 })

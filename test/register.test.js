@@ -1,8 +1,6 @@
-/* global describe it beforeAll afterAll */
+/* global describe it expect */
 import sinon from 'sinon'
-import {assert} from 'chai'
 import {run} from '@syncano/test'
-import {createInstance, deleteInstance, uniqueInstance} from '@syncano/test-tools'
 
 describe('register', () => {
   it('can register user with valid email', async () => {
@@ -58,7 +56,7 @@ describe('register', () => {
     }
 
     const result = await run('register', { args })
-    assert.propertyVal(result, 'code', 400)
-    assert.propertyVal(result.data, 'username', 'Given email is invalid.')
+    expect(result).toHaveProperty('code', 400)
+    expect(result.data).toHaveProperty('username', 'Given email is invalid.')
   })
 })
