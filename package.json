@@ -1,6 +1,6 @@
 {
   "name": "@sockets/user-auth",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "public": true,
   "description": "Syncano Socket for basic user authentication and registration",
   "author": "Syncano",

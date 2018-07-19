@@ -2,7 +2,7 @@ import FB from 'fb'
 import Server from '@syncano/core'
 import * as crypto from 'crypto'
 export default ctx => {
-  const {users, response, logger} = Server(ctx)
+  const {users, response, logger} = new Server(ctx)
   const {debug} = logger('hello script')
 
   // const network = ctx.args.network
