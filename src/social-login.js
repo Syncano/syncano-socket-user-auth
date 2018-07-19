@@ -19,6 +19,7 @@ export default ctx => {
           username: res.id
         }, {
           username: res.id,
+          email: res.email,
           password: crypto.randomBytes(16).toString('hex'),
           fullName: res.name
         })
