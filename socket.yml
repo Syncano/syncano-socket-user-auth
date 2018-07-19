@@ -1,31 +1,32 @@
 name: user-auth
 description: Basic user auth/register Socket
-version: 0.0.6
 runtime: nodejs_v8
+
 keywords:
   - user
   - register
   - auth
   - authentication
+
 classes:
   user:
-    - name: full_name
+    - name: fullName
       type: string
-    - name: type
-      type: string
-      filter_index: true
+
 endpoints:
   login:
     description: Log in user by checking username and password
-    parameters:
-      username:
-        type: string
-        description: Username
-        example: joe
-      password:
-        type: string
-        description: User password
-        example: super-sercret-password
+    inputs:
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          minLength: 2
+        password:
+          type: string
+          minLength: 2
     response:
       success:
         exit_code: 200
@@ -44,15 +45,20 @@ endpoints:
           }
   register:
     description: Register user
-    parameters:
-      username:
-        type: string
-        description: User name
-        example: joe@email.com
-      password:
-        type: string
-        description: User password
-        example: super-sercret-password
+    inputs:
+      required:
+        - username
+        - password
+      properties:
+        fullName:
+          type: string
+          minLength: 2
+        username:
+          type: string
+          minLength: 2
+        password:
+          type: string
+          minLength: 6
     response:
       success:
         description: Success
@@ -76,15 +82,14 @@ endpoints:
              "username": "User already exists." }
           }
   social-login:
-    parameters:
-      network:
-        type: string
-        description: Network name
-        example: facebook
-      access_token:
-        type: string
-        description: Access token
-        example: 3254uy23b4k32
+    inputs:
+      required:
+        - accessToken
+        - password
+      properties:
+        accessToken:
+          type: string
+          minLength: 2
     response:
       success:
         description: Success
@@ -98,5 +103,5 @@ endpoints:
         description: Authentication failed
         example: |
           {
-             "message": "Error!" }
+             "message": "Error!"
           }
