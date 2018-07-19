@@ -10,6 +10,8 @@ keywords:
 
 classes:
   user:
+    - name: email
+      type: string
     - name: fullName
       type: string
 
@@ -85,7 +87,6 @@ endpoints:
     inputs:
       required:
         - accessToken
-        - password
       properties:
         accessToken:
           type: string
