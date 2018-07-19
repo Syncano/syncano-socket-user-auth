@@ -7,7 +7,7 @@ export default ctx => {
   const {debug} = logger('user-auth/social-login')
   const {accessToken} = ctx.args
 
-  FB.api('me', {fields: 'id,name', access_token: accessToken}, async res => {
+  FB.api('me', {fields: 'id,name,email', access_token: accessToken}, async res => {
     debug('fb response', res)
 
     try {
