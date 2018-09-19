@@ -1,36 +1,36 @@
 import FB from 'fb'
-import Syncano from 'syncano-server'
+import Server from '@syncano/core'
+import * as crypto from 'crypto'
 
 export default ctx => {
-  const {users, response, logger} = Syncano(ctx)
-  const {debug} = logger('hello script')
+  const {users, response, logger} = new Server(ctx)
+  const {debug} = logger('user-auth/social-login')
+  const {accessToken} = ctx.args
 
-  // const network = ctx.args.network
-  const accessToken = ctx.args.access_token
-
-  FB.api('me', {fields: 'id,name', access_token: accessToken}, async res => {
+  FB.api('me', {fields: 'id,name,email', access_token: accessToken}, async res => {
     debug('fb response', res)
+
     try {
       debug('finding user')
+
       const user = await users
-        .fields('id', 'user_key', 'full_name', 'groups', 'created_at')
-        .firstOrCreate(
-        {
+        .fields('id', 'user_key as token', 'fullName', 'groups', 'created_at as createdAt')
+        .firstOrCreate({
           username: res.id
-        },
-        {
+        }, {
           username: res.id,
-          password: Math.random()
-              .toString(36)
-              .slice(-8),
-          full_name: res.name
-        }
-        )
+          email: res.email,
+          password: crypto.randomBytes(16).toString('hex'),
+          fullName: res.name
+        })
+
       debug('user', user)
+
       return response.json(user)
     } catch (err) {
       debug('user not found')
-      return response.json({msg: 'Error!'}, 400)
+
+      return response.json({message: 'An error occured!'}, 400)
     }
   })
 }

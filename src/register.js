@@ -5,23 +5,28 @@ export default async (ctx) => {
   const {users, response, logger} = new Server(ctx)
   const {username, password} = ctx.args
 
-  const {debug} = logger('user:auth:register')
+  const {debug} = logger('user-auth/register')
 
   if (isEmail(username)) {
     let user
     try {
       // Try to find user with this username
       user = await users.where('username', 'eq', username).first()
+
       if (user) {
         // If there is a user, we can't register him
         return response.json({username: 'User already exists.'}, 400)
       } else {
         // Let's try to create user account
         user = await users.create({username, password})
+
         return response.json({
           id: user.id,
           token: user.user_key,
-          username: user.username
+          username: user.username,
+          fullName: user.fullName,
+          groups: user.groups,
+          createdAt: user.createdAt
         })
       }
     } catch (err) {
